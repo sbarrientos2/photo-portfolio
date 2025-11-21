@@ -1,0 +1,81 @@
+{
+  "categories": [
+    {
+      "id": "australia",
+      "title": "Australia",
+      "photos": [
+        {
+          "id": "51560720-a338-4c69-b8f6-08c2b0015b91",
+          "src": "/uploads/DSC04107-1763767896144-2579681.jpg",
+          "caption": "DSC04107"
+        },
+        {
+          "id": "c30e4ee7-18f8-4b28-be60-c456bf523631",
+          "src": "/uploads/DSC04136-1763767902403-465694656.jpg",
+          "caption": "DSC04136"
+        },
+        {
+          "id": "dcc4285a-9aa4-4968-bb63-572a48894ffc",
+          "src": "/uploads/DSC04231-1763767908751-292576103.jpg",
+          "caption": "DSC04231"
+        },
+        {
+          "id": "abdc8af7-1c95-4057-aafe-777f3ced2ab9",
+          "src": "/uploads/DSC04781-1763767914466-124260322.jpg",
+          "caption": "DSC04781"
+        }
+      ],
+      "coverImage": "/uploads/DSC04107-1763767896144-2579681.jpg"
+    },
+    {
+      "id": "indonesia",
+      "title": "Indonesia",
+      "photos": [
+        {
+          "id": "de8dc174-c97f-48fb-83e7-bca5df2e49f5",
+          "src": "/uploads/DSC07998-1763764398003-223813384.jpg",
+          "caption": "Ruth&I",
+          "description": "I LOVE YOU"
+        },
+        {
+          "id": "52221048-4e68-480c-8c1e-c7f8e08bd2a9",
+          "src": "/uploads/DSC07811-1763764418545-721783700.jpg",
+          "caption": "DSC07811"
+        },
+        {
+          "id": "b46fa130-4c82-4a12-a848-5369861c6b21",
+          "src": "/uploads/DSC07986-1763764429255-148627002.jpg",
+          "caption": "DSC07986"
+        }
+      ],
+      "coverImage": "/uploads/DSC07998-1763764398003-223813384.jpg"
+    },
+    {
+      "id": "chile",
+      "title": "Chile",
+      "photos": [
+        {
+          "id": "13e2bc50-880b-4bde-9c60-9578046f815e",
+          "src": "/uploads/DSC03187-1763765451733-553051504.jpg",
+          "caption": "DSC03187"
+        },
+        {
+          "id": "37fbcf1d-2e47-4d9f-88aa-b615eda7decf",
+          "src": "/uploads/DSC03237-1763765462608-159099400.jpg",
+          "caption": "DSC03237"
+        },
+        {
+          "id": "968e6fa6-24ed-4347-858f-d7668ee07372",
+          "src": "/uploads/DSC03354-1763765500109-929684315.jpg",
+          "caption": "DSC03354"
+        },
+        {
+          "id": "2118f760-29d0-4484-805c-d661f170d4bb",
+          "src": "/uploads/DSC03337-1763765548370-680631926.jpg",
+          "caption": "DSC03337"
+        }
+      ],
+      "coverImage": "/uploads/DSC03354-1763765500109-929684315.jpg"
+    }
+  ]
+}
