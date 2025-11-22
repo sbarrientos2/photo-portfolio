@@ -46,8 +46,6 @@ export default function AdminDashboard({ initialData }: Props) {
             );
             const cloudinaryData = await cloudinaryRes.json();
 
-            console.log('Cloudinary response:', cloudinaryData);
-
             if (cloudinaryData.secure_url) {
                 const newPhoto = await addPhoto(selectedCategory.id, cloudinaryData.secure_url, file.name.split('.')[0]);
 
