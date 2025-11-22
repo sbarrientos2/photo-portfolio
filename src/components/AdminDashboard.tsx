@@ -35,20 +35,13 @@ export default function AdminDashboard({ initialData }: Props) {
         const file = e.target.files[0];
 
         try {
-            // Get signature from our API
-            const signatureRes = await fetch('/api/upload');
-            const { signature, timestamp, cloudName, apiKey } = await signatureRes.json();
-
-            // Upload directly to Cloudinary
+            // Upload directly to Cloudinary using unsigned preset
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('signature', signature);
-            formData.append('timestamp', timestamp.toString());
-            formData.append('api_key', apiKey);
-            formData.append('folder', 'portfolio');
+            formData.append('upload_preset', 'portfolio_upload');
 
             const cloudinaryRes = await fetch(
-                `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+                'https://api.cloudinary.com/v1_1/djxbbt7hx/image/upload',
                 { method: 'POST', body: formData }
             );
             const cloudinaryData = await cloudinaryRes.json();
