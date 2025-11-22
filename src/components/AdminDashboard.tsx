@@ -33,18 +33,28 @@ export default function AdminDashboard({ initialData }: Props) {
         setIsUploading(true);
 
         const file = e.target.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
 
         try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await res.json();
+            // Get signature from our API
+            const signatureRes = await fetch('/api/upload');
+            const { signature, timestamp, cloudName, apiKey } = await signatureRes.json();
 
-            if (data.success) {
-                const newPhoto = await addPhoto(selectedCategory.id, data.path, file.name.split('.')[0]);
+            // Upload directly to Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('signature', signature);
+            formData.append('timestamp', timestamp.toString());
+            formData.append('api_key', apiKey);
+            formData.append('folder', 'portfolio');
+
+            const cloudinaryRes = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+                { method: 'POST', body: formData }
+            );
+            const cloudinaryData = await cloudinaryRes.json();
+
+            if (cloudinaryData.secure_url) {
+                const newPhoto = await addPhoto(selectedCategory.id, cloudinaryData.secure_url, file.name.split('.')[0]);
 
                 if (newPhoto) {
                     const updatedPhotos = [...selectedCategory.photos, newPhoto];
@@ -58,6 +68,8 @@ export default function AdminDashboard({ initialData }: Props) {
                     setSelectedCategory(updatedCategory);
                     setCategories(prev => prev.map(c => c.id === selectedCategory.id ? updatedCategory : c));
                 }
+            } else {
+                throw new Error('Upload failed');
             }
         } catch (error) {
             console.error('Upload failed', error);
