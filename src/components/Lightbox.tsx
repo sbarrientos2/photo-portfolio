@@ -34,30 +34,59 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
     }, [onClose, handleNext, handlePrev]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
+        <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl animate-[fadeIn_0.3s_ease-out]"
+            onClick={onClose}
+        >
+            {/* Close Button */}
             <button
                 onClick={onClose}
-                className="absolute top-4 right-4 text-white/70 hover:text-white z-50"
+                className="absolute top-6 right-6 z-[110] w-12 h-12 flex items-center justify-center border border-[var(--color-gold)]/40 rounded-full hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 text-[var(--color-cream)] transition-all duration-300 group"
+                aria-label="Close lightbox"
             >
-                <X size={32} />
+                <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+            </button>
+
+            {/* Navigation Buttons */}
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrev();
+                }}
+                className="absolute left-6 z-[110] w-14 h-14 flex items-center justify-center border border-[var(--color-gold)]/40 rounded-full hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 text-[var(--color-cream)] transition-all duration-300 group"
+                aria-label="Previous image"
+            >
+                <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
             </button>
 
             <button
-                onClick={handlePrev}
-                className="absolute left-4 text-white/70 hover:text-white z-50 p-2"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    handleNext();
+                }}
+                className="absolute right-6 z-[110] w-14 h-14 flex items-center justify-center border border-[var(--color-gold)]/40 rounded-full hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 text-[var(--color-cream)] transition-all duration-300 group"
+                aria-label="Next image"
             >
-                <ChevronLeft size={48} />
+                <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform duration-300" />
             </button>
 
-            <button
-                onClick={handleNext}
-                className="absolute right-4 text-white/70 hover:text-white z-50 p-2"
-            >
-                <ChevronRight size={48} />
-            </button>
+            {/* Image Counter */}
+            <div className="absolute top-6 left-6 z-[110] px-4 py-2 backdrop-blur-sm bg-black/40 border border-[var(--color-gold)]/20 rounded-full">
+                <span className="text-xs tracking-[0.2em] uppercase text-[var(--color-gold)] font-light">
+                    {currentIndex + 1} / {photos.length}
+                </span>
+            </div>
 
-            <div className="relative w-full h-full max-w-6xl max-h-[90vh] p-4 flex flex-col items-center justify-center">
+            {/* Image Container */}
+            <div
+                className="relative w-full h-full max-w-7xl max-h-[85vh] px-20 py-20 flex flex-col items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="relative w-full h-full">
+                    {/* Decorative Border */}
+                    <div className="absolute inset-0 border border-[var(--color-gold)]/20 pointer-events-none z-10" />
+
+                    {/* Image */}
                     <Image
                         src={photo.src}
                         alt={photo.caption || ''}
@@ -66,10 +95,20 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
                         priority
                     />
                 </div>
+
+                {/* Caption Area */}
                 {(photo.caption || photo.description) && (
-                    <div className="mt-4 text-center text-white max-w-2xl">
-                        {photo.caption && <h3 className="text-xl font-bold">{photo.caption}</h3>}
-                        {photo.description && <p className="text-gray-300 mt-2">{photo.description}</p>}
+                    <div className="mt-8 text-center max-w-3xl mx-auto px-6">
+                        {photo.caption && (
+                            <h3 className="font-[var(--font-display)] text-2xl md:text-3xl text-[var(--color-cream)] mb-3 font-light">
+                                {photo.caption}
+                            </h3>
+                        )}
+                        {photo.description && (
+                            <p className="text-sm md:text-base text-[var(--color-gray-light)] leading-relaxed font-light">
+                                {photo.description}
+                            </p>
+                        )}
                     </div>
                 )}
             </div>

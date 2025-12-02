@@ -5,7 +5,10 @@
       "Bash(node -e:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Skill(frontend-design)",
+      "Bash(npm run build:*)",
+      "Bash(git tag:*)"
     ],
     "deny": [],
     "ask": []
