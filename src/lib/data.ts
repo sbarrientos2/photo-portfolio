@@ -165,3 +165,17 @@ export async function reorderPhotos(categoryId: string, photoIds: string[]): Pro
     await sql`UPDATE photos SET sort_order = ${i} WHERE id = ${photoIds[i]} AND category_id = ${categoryId}`;
   }
 }
+
+export async function addMultiplePhotos(categoryId: string, photos: {id: string, src: string, caption: string}[]) {
+    if (photos.length === 0) return;
+    await initDb();
+    const maxOrderResult = await sql`SELECT COALESCE(MAX(sort_order), -1) as max FROM photos WHERE category_id = ${categoryId}`;
+    let currentMaxOrder = maxOrderResult[0].max as number;
+
+    const valuesToInsert = photos.map(p => {
+        currentMaxOrder++;
+        return [p.id, categoryId, p.src, p.caption, currentMaxOrder];
+    });
+
+    await sql`INSERT INTO photos (id, category_id, src, caption, sort_order) VALUES ${valuesToInsert}`;
+}

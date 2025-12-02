@@ -9,6 +9,7 @@ import {
     updatePhoto as dbUpdatePhoto,
     reorderCategories as dbReorderCategories,
     reorderPhotos as dbReorderPhotos,
+    addMultiplePhotos as dbAddMultiplePhotos,
     Photo,
 } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
@@ -73,4 +74,15 @@ export async function reorderPhotos(categoryId: string, photoIds: string[]) {
     await dbReorderPhotos(categoryId, photoIds);
     revalidatePath(`/portfolio/${categoryId}`);
     revalidatePath('/admin');
+}
+
+export async function addMultiplePhotos(categoryId: string, photos: {src: string, caption: string}[]) {
+    const photosWithIds = photos.map(p => ({ ...p, id: uuidv4() }));
+    await dbAddMultiplePhotos(categoryId, photosWithIds);
+    
+    revalidatePath(`/portfolio/${categoryId}`);
+    revalidatePath('/admin');
+    revalidatePath('/');
+
+    return photosWithIds;
 }

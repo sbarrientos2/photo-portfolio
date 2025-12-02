@@ -2,7 +2,7 @@
 
 import { useState, useRef, useTransition } from 'react';
 import { Category, Photo } from '@/lib/data';
-import { addCategory, deleteCategory, addPhoto, deletePhoto, updateCategoryCover, updatePhoto, reorderCategories, reorderPhotos } from '@/app/actions';
+import { addCategory, deleteCategory, addPhoto, deletePhoto, updateCategoryCover, updatePhoto, reorderCategories, reorderPhotos, addMultiplePhotos } from '@/app/actions';
 import { Trash2, Upload, Plus, X, Image as ImageIcon, Edit2, GripVertical } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
@@ -131,36 +131,57 @@ export default function AdminDashboard({ initialData }: Props) {
 
     async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
         if (!e.target.files?.length || !selectedCategory) return;
-        
-        const file = e.target.files[0];
-        const toastId = toast.loading(`Uploading "${file.name}"...`);
+
+        const files = Array.from(e.target.files);
+        const toastId = toast.loading(`Uploading ${files.length} photo(s)...`);
         setIsUploading(true);
 
         try {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', 'portfolio_upload');
-            const cloudinaryRes = await fetch('https://api.cloudinary.com/v1_1/djxbbt7hx/image/upload', { method: 'POST', body: formData });
-            const cloudinaryData = await cloudinaryRes.json();
-            
-            if (cloudinaryData.secure_url) {
-                const newPhoto = await addPhoto(selectedCategory.id, cloudinaryData.secure_url, file.name.split('.')[0] || 'Untitled');
-                if (newPhoto) {
-                    const updatedPhotos = [...selectedCategory.photos, newPhoto];
-                    let updatedCategory = { ...selectedCategory, photos: updatedPhotos };
-                    if (updatedPhotos.length === 1) {
-                        updatedCategory.coverImage = newPhoto.src;
-                        await updateCategoryCover(selectedCategory.id, newPhoto.src);
-                    }
-                    setSelectedCategory(updatedCategory);
-                    setCategories(prev => prev.map(c => c.id === selectedCategory.id ? updatedCategory : c));
-                    toast.success('Upload complete!', { id: toastId });
-                }
-            } else {
-                throw new Error('Upload failed');
+            const uploadPromises = files.map(file => {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'portfolio_upload');
+                return fetch('https://api.cloudinary.com/v1_1/djxbbt7hx/image/upload', { method: 'POST', body: formData });
+            });
+
+            const results = await Promise.all(uploadPromises);
+            const settledResults = await Promise.all(results.map(res => res.json()));
+
+            const successfullyUploaded = settledResults.filter(res => res.secure_url);
+
+            if (successfullyUploaded.length === 0) {
+                throw new Error('All uploads failed');
             }
+
+            const newPhotosData = successfullyUploaded.map(res => ({
+                src: res.secure_url,
+                caption: res.original_filename.split('.')[0] || 'Untitled'
+            }));
+
+            const newPhotos = await addMultiplePhotos(selectedCategory.id, newPhotosData);
+            
+            if (newPhotos) {
+                const updatedPhotos = [...selectedCategory.photos, ...newPhotos];
+                let updatedCategory = { ...selectedCategory, photos: updatedPhotos };
+
+                // Set cover if it was the first photo upload to an empty category
+                if (selectedCategory.photos.length === 0 && updatedPhotos.length > 0) {
+                    updatedCategory.coverImage = updatedPhotos[0].src;
+                    await updateCategoryCover(selectedCategory.id, updatedPhotos[0].src);
+                }
+                
+                setSelectedCategory(updatedCategory);
+                setCategories(prev => prev.map(c => c.id === selectedCategory.id ? updatedCategory : c));
+            }
+            
+            if (successfullyUploaded.length < files.length) {
+                toast.warning(`${files.length - successfullyUploaded.length} photo(s) failed to upload.`, { id: toastId });
+            } else {
+                toast.success('All photos uploaded!', { id: toastId });
+            }
+
         } catch (error) {
-            toast.error('Upload failed.', { id: toastId });
+            toast.error('An error occurred during upload.', { id: toastId });
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -306,7 +327,7 @@ export default function AdminDashboard({ initialData }: Props) {
             <div className="md:col-span-2">
                 {selectedCategory ? (
                     <div>
-                        <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold">{selectedCategory.title}</h2><div className="flex gap-2"><input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept="image/*" /><button onClick={() => fileInputRef.current?.click()} disabled={isUploading} className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50">{isUploading ? 'Uploading...' : <><Upload size={18} /> Upload Photo</>}</button></div></div>
+                        <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold">{selectedCategory.title}</h2><div className="flex gap-2"><input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept="image/*" multiple /><button onClick={() => fileInputRef.current?.click()} disabled={isUploading} className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50">{isUploading ? 'Uploading...' : <><Upload size={18} /> Upload Photo</>}</button></div></div>
                         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handlePhotoDragEnd}>
                             <SortableContext items={selectedCategory.photos} strategy={rectSortingStrategy}>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
