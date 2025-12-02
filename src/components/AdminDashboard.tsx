@@ -141,7 +141,7 @@ export default function AdminDashboard({ initialData }: Props) {
                 const formData = new FormData();
                 formData.append('file', file);
                 formData.append('upload_preset', 'portfolio_upload');
-                return fetch('https://api.cloudinary.com/v1_1/djxbbt7hx/image/upload', { method: 'POST', body: formData });
+                return fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
             });
 
             const results = await Promise.all(uploadPromises);
@@ -180,8 +180,9 @@ export default function AdminDashboard({ initialData }: Props) {
                 toast.success('All photos uploaded!', { id: toastId });
             }
 
-        } catch (error) {
-            toast.error('An error occurred during upload.', { id: toastId });
+        } catch (error: any) {
+            console.error('Detailed upload error:', error);
+            toast.error(`Upload failed: ${error.message}`, { id: toastId });
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
