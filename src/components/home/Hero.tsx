@@ -25,7 +25,7 @@ export default function Hero() {
             animation: 'fadeInUp 1s ease-out 0.4s forwards'
           }}
         >
-          Photographer & Visual Artist — Capturing moments through a lens of editorial elegance and raw emotion
+          Photographer - Capturing moments through a lens
         </p>
       </div>
 
