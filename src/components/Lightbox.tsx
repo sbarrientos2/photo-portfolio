@@ -35,13 +35,21 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl animate-[fadeIn_0.3s_ease-out]"
+            className="fixed inset-0 z-[100] flex items-center justify-center animate-[fadeIn_0.3s_ease-out]"
             onClick={onClose}
         >
+            {/* Blurred Background - Multiple layers for softer effect */}
+            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 backdrop-blur-3xl" />
+            <div
+                className="absolute inset-0 bg-cover bg-center opacity-20 blur-3xl scale-110"
+                style={{ backgroundImage: `url(${photo.src})` }}
+            />
+
             {/* Close Button */}
             <button
                 onClick={onClose}
-                className="absolute top-6 right-6 z-[110] w-12 h-12 flex items-center justify-center border border-[var(--color-gold)]/40 rounded-full hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 text-[var(--color-cream)] transition-all duration-300 group"
+                className="absolute top-6 right-6 z-[110] w-12 h-12 flex items-center justify-center border border-white/30 rounded-full hover:border-white/60 hover:bg-white/10 text-white transition-all duration-300 group backdrop-blur-md"
                 aria-label="Close lightbox"
             >
                 <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
@@ -53,7 +61,7 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
                     e.stopPropagation();
                     handlePrev();
                 }}
-                className="absolute left-6 z-[110] w-14 h-14 flex items-center justify-center border border-[var(--color-gold)]/40 rounded-full hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 text-[var(--color-cream)] transition-all duration-300 group"
+                className="absolute left-6 z-[110] w-14 h-14 flex items-center justify-center border border-white/30 rounded-full hover:border-white/60 hover:bg-white/10 text-white transition-all duration-300 group backdrop-blur-md"
                 aria-label="Previous image"
             >
                 <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
@@ -64,48 +72,48 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
                     e.stopPropagation();
                     handleNext();
                 }}
-                className="absolute right-6 z-[110] w-14 h-14 flex items-center justify-center border border-[var(--color-gold)]/40 rounded-full hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 text-[var(--color-cream)] transition-all duration-300 group"
+                className="absolute right-6 z-[110] w-14 h-14 flex items-center justify-center border border-white/30 rounded-full hover:border-white/60 hover:bg-white/10 text-white transition-all duration-300 group backdrop-blur-md"
                 aria-label="Next image"
             >
                 <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform duration-300" />
             </button>
 
             {/* Image Counter */}
-            <div className="absolute top-6 left-6 z-[110] px-4 py-2 backdrop-blur-sm bg-black/40 border border-[var(--color-gold)]/20 rounded-full">
-                <span className="text-xs tracking-[0.2em] uppercase text-[var(--color-gold)] font-light">
+            <div className="absolute top-6 left-6 z-[110] px-4 py-2 backdrop-blur-md bg-white/10 border border-white/20 rounded-full">
+                <span className="text-xs tracking-[0.2em] uppercase text-white font-light">
                     {currentIndex + 1} / {photos.length}
                 </span>
             </div>
 
-            {/* Image Container */}
+            {/* Image Container - Larger size */}
             <div
-                className="relative w-full h-full max-w-7xl max-h-[85vh] px-20 py-20 flex flex-col items-center justify-center"
+                className="relative w-full h-full max-w-[95vw] max-h-[95vh] px-4 md:px-12 py-4 md:py-12 flex flex-col items-center justify-center z-[105]"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="relative w-full h-full">
-                    {/* Decorative Border */}
-                    <div className="absolute inset-0 border border-[var(--color-gold)]/20 pointer-events-none z-10" />
+                <div className="relative w-full h-full shadow-2xl">
+                    {/* Subtle glow effect around image */}
+                    <div className="absolute inset-0 bg-white/5 blur-2xl" />
 
                     {/* Image */}
                     <Image
                         src={photo.src}
                         alt={photo.caption || ''}
                         fill
-                        className="object-contain"
+                        className="object-contain relative z-10"
                         priority
                     />
                 </div>
 
                 {/* Caption Area */}
                 {(photo.caption || photo.description) && (
-                    <div className="mt-8 text-center max-w-3xl mx-auto px-6">
+                    <div className="mt-6 text-center max-w-3xl mx-auto px-6 backdrop-blur-md bg-black/20 rounded-2xl py-4">
                         {photo.caption && (
-                            <h3 className="font-[var(--font-display)] text-2xl md:text-3xl text-[var(--color-cream)] mb-3 font-light">
+                            <h3 className="font-[var(--font-display)] text-xl md:text-2xl text-white mb-2 font-light">
                                 {photo.caption}
                             </h3>
                         )}
                         {photo.description && (
-                            <p className="text-sm md:text-base text-[var(--color-gray-light)] leading-relaxed font-light">
+                            <p className="text-xs md:text-sm text-white/80 leading-relaxed font-light">
                                 {photo.description}
                             </p>
                         )}
