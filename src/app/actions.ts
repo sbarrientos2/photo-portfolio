@@ -8,20 +8,24 @@ import {
     updateCategoryCover as dbUpdateCategoryCover,
     updatePhoto as dbUpdatePhoto,
     reorderCategories as dbReorderCategories,
+    reorderPhotos as dbReorderPhotos,
     Photo,
 } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function addCategory(formData: FormData) {
-    const title = formData.get('title') as string;
-    if (!title) return;
+export async function addCategory(title: string) {
+    if (!title) {
+        throw new Error("Title is required");
+    }
 
-    const id = title.toLowerCase().replace(/\s+/g, '-');
-    await dbAddCategory(id, title);
+    const id = title.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
+    const newCategory = await dbAddCategory(id, title);
 
     revalidatePath('/');
     revalidatePath('/admin');
+    
+    return newCategory;
 }
 
 export async function deleteCategory(id: string) {
@@ -62,5 +66,11 @@ export async function updatePhoto(categoryId: string, photoId: string, updates: 
 export async function reorderCategories(categoryIds: string[]) {
     await dbReorderCategories(categoryIds);
     revalidatePath('/');
+    revalidatePath('/admin');
+}
+
+export async function reorderPhotos(categoryId: string, photoIds: string[]) {
+    await dbReorderPhotos(categoryId, photoIds);
+    revalidatePath(`/portfolio/${categoryId}`);
     revalidatePath('/admin');
 }

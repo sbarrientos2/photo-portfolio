@@ -87,13 +87,18 @@ export async function getCategory(id: string): Promise<Category | undefined> {
   }
 }
 
-export async function addCategory(id: string, title: string): Promise<void> {
+export async function addCategory(id: string, title: string): Promise<Category> {
   await initDb();
   const maxOrder = await sql`SELECT COALESCE(MAX(sort_order), 0) as max FROM categories`;
   await sql`
     INSERT INTO categories (id, title, sort_order)
     VALUES (${id}, ${title}, ${(maxOrder[0].max as number) + 1})
   `;
+  return {
+    id,
+    title,
+    photos: [],
+  }
 }
 
 export async function deleteCategory(id: string): Promise<void> {
@@ -151,5 +156,12 @@ export async function reorderCategories(categoryIds: string[]): Promise<void> {
   await initDb();
   for (let i = 0; i < categoryIds.length; i++) {
     await sql`UPDATE categories SET sort_order = ${i} WHERE id = ${categoryIds[i]}`;
+  }
+}
+
+export async function reorderPhotos(categoryId: string, photoIds: string[]): Promise<void> {
+  await initDb();
+  for (let i = 0; i < photoIds.length; i++) {
+    await sql`UPDATE photos SET sort_order = ${i} WHERE id = ${photoIds[i]} AND category_id = ${categoryId}`;
   }
 }
