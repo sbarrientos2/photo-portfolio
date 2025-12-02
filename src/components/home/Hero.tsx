@@ -25,7 +25,7 @@ export default function Hero() {
             animation: 'fadeInUp 1s ease-out 0.4s forwards'
           }}
         >
-          Photographer - Capturing the beauty of the world with my girlfriend moments through a lens.
+          Photographer - Capturing the beauty of the world with my girlfriend through a lens.
         </p>
       </div>
 
