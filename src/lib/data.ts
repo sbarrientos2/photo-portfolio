@@ -174,8 +174,8 @@ export async function addMultiplePhotos(categoryId: string, photos: {id: string,
 
     const valuesToInsert = photos.map(p => {
         currentMaxOrder++;
-        return [p.id, categoryId, p.src, p.caption, currentMaxOrder];
+        return sql`(${p.id}, ${categoryId}, ${p.src}, ${p.caption}, ${currentMaxOrder})`;
     });
 
-    await sql`INSERT INTO photos (id, category_id, src, caption, sort_order) VALUES ${valuesToInsert}`;
+    await sql`INSERT INTO photos (id, category_id, src, caption, sort_order) VALUES ${sql(valuesToInsert)}`;
 }
