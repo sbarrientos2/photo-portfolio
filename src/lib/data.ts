@@ -172,10 +172,8 @@ export async function addMultiplePhotos(categoryId: string, photos: {id: string,
     const maxOrderResult = await sql`SELECT COALESCE(MAX(sort_order), -1) as max FROM photos WHERE category_id = ${categoryId}`;
     let currentMaxOrder = maxOrderResult[0].max as number;
 
-    const valuesToInsert = photos.map(p => {
+    for (const photo of photos) {
         currentMaxOrder++;
-        return sql`(${p.id}, ${categoryId}, ${p.src}, ${p.caption}, ${currentMaxOrder})`;
-    });
-
-    await sql`INSERT INTO photos (id, category_id, src, caption, sort_order) VALUES ${sql(valuesToInsert)}`;
+        await sql`INSERT INTO photos (id, category_id, src, caption, sort_order) VALUES (${photo.id}, ${categoryId}, ${photo.src}, ${photo.caption}, ${currentMaxOrder})`;
+    }
 }
