@@ -40,7 +40,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
                     src={category.coverImage}
                     alt={category.title}
                     fill
-                    className="object-cover transition-all duration-[1200ms] ease-out group-hover:scale-110 group-hover:rotate-[2deg]"
+                    className="animate-kenburns object-cover transition-all duration-[1200ms] ease-out group-hover:[animation-play-state:paused] group-hover:rotate-[2deg]"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-[var(--color-gray-mid)] font-[var(--font-display)] text-2xl italic">

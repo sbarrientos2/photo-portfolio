@@ -64,7 +64,13 @@ export default async function CategoryPage({ params }: Props) {
                     </Link>
 
                     {/* Category Title */}
-                    <h1 className="font-[var(--font-display)] text-6xl md:text-8xl lg:text-9xl font-light text-[var(--color-cream)] leading-none mb-6">
+                    <h1 
+                        className="font-[var(--font-display)] text-6xl md:text-8xl lg:text-9xl font-light text-[var(--color-cream)] leading-none mb-6"
+                        style={{
+                            animation: 'fadeInUp 1s ease-out 0.2s forwards',
+                            opacity: 0,
+                        }}
+                    >
                         {category.title}
                     </h1>
 
