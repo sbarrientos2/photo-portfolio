@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  /* Editorial Color Palette */
+  /* Dark Theme (Default) */
+  --color-bg: #1a1a1a;
+  --color-bg-secondary: #242424;
+  --color-text: #f5f1e8;
+  --color-text-muted: #a8a8a8;
+  --color-text-subtle: #6a6a6a;
+  --color-accent: #d4af37;
+  --color-accent-muted: #b8965f;
+  --color-border: rgba(212, 175, 55, 0.1);
+  --color-overlay: rgba(0, 0, 0, 0.8);
+  --color-header-bg: rgba(26, 26, 26, 0.8);
+
+  /* Legacy variables for compatibility */
   --color-charcoal: #1a1a1a;
   --color-cream: #f5f1e8;
   --color-warm-white: #fafaf7;
@@ -24,6 +36,30 @@
   /* Transitions */
   --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-theme: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --color-bg: #fafaf7;
+  --color-bg-secondary: #f0ede6;
+  --color-text: #1a1a1a;
+  --color-text-muted: #4a4a4a;
+  --color-text-subtle: #6a6a6a;
+  --color-accent: #b8965f;
+  --color-accent-muted: #d4af37;
+  --color-border: rgba(26, 26, 26, 0.1);
+  --color-overlay: rgba(255, 255, 255, 0.9);
+  --color-header-bg: rgba(250, 250, 247, 0.9);
+
+  /* Update legacy variables for light theme */
+  --color-charcoal: #fafaf7;
+  --color-cream: #1a1a1a;
+  --color-warm-white: #1a1a1a;
+  --color-gold: #b8965f;
+  --color-muted-gold: #8a7245;
+  --color-gray-light: #4a4a4a;
+  --color-gray-mid: #6a6a6a;
 }
 
 @theme inline {
@@ -36,11 +72,12 @@
 }
 
 body {
-  background: var(--color-charcoal);
-  color: var(--color-cream);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body);
   font-weight: 300;
   overflow-x: hidden;
+  transition: var(--transition-theme);
 }
 
 /* Smooth scrolling */
@@ -50,8 +87,8 @@ html {
 
 /* Selection styling */
 ::selection {
-  background: var(--color-gold);
-  color: var(--color-charcoal);
+  background: var(--color-accent);
+  color: var(--color-bg);
 }
 
 /* Custom scrollbar */
@@ -60,16 +97,16 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-charcoal);
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-muted-gold);
+  background: var(--color-accent-muted);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold);
+  background: var(--color-accent);
 }
 
 /* Keyframe Animations */
@@ -106,3 +143,18 @@ html {
   animation: kenburns 20s ease-out infinite alternate;
 }
 
+/* Theme toggle animation */
+@keyframes rotateIn {
+  from {
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.theme-icon {
+  animation: rotateIn 0.3s ease-out;
+}
