@@ -155,7 +155,7 @@ export default function AdminDashboard({ initialData }: Props) {
 
             const newPhotosData = successfullyUploaded.map(res => ({
                 src: res.secure_url,
-                caption: res.original_filename.split('.')[0] || 'Untitled'
+                caption: ''
             }));
 
             const newPhotos = await addMultiplePhotos(selectedCategory.id, newPhotosData);
