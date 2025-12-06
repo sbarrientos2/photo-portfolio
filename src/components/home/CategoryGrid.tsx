@@ -63,10 +63,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
                 </span>
 
                 {/* Title */}
-                <h2
-                  className="font-[var(--font-display)] text-4xl md:text-6xl lg:text-7xl font-light text-[var(--color-cream)] leading-none mb-3 transition-all duration-500 transform group-hover:translate-x-2"
-                  style={{ textShadow: '0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6)' }}
-                >
+                <h2 className="font-[var(--font-display)] text-4xl md:text-6xl lg:text-7xl font-light text-[#f5f1e8] leading-none mb-3 transition-all duration-500 transform group-hover:translate-x-2">
                   {category.title}
                 </h2>
 
