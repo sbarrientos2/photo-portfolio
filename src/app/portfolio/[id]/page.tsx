@@ -1,8 +1,8 @@
 import { getCategory } from '@/lib/data';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import PhotoGrid from '@/components/PhotoGrid';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface Props {
     params: Promise<{
@@ -40,12 +40,15 @@ export default async function CategoryPage({ params }: Props) {
                     <Link href="/" className="text-sm tracking-[0.3em] uppercase text-[var(--color-gold)] font-light hover:text-[var(--color-cream)] transition-colors duration-300">
                         SB
                     </Link>
-                    <nav>
-                        <ul className="flex gap-8 md:gap-12 text-xs md:text-sm uppercase tracking-[0.2em] font-light">
-                            <li><Link href="/" className="text-[var(--color-cream)] hover:text-[var(--color-gold)] transition-colors duration-300">Portfolio</Link></li>
-                            <li><Link href="/about" className="text-[var(--color-gray-light)] hover:text-[var(--color-gold)] transition-colors duration-300">About</Link></li>
-                        </ul>
-                    </nav>
+                    <div className="flex items-center gap-6 md:gap-10">
+                        <nav>
+                            <ul className="flex gap-8 md:gap-12 text-xs md:text-sm uppercase tracking-[0.2em] font-light">
+                                <li><Link href="/" className="text-[var(--color-cream)] hover:text-[var(--color-gold)] transition-colors duration-300">Portfolio</Link></li>
+                                <li><Link href="/about" className="text-[var(--color-gray-light)] hover:text-[var(--color-gold)] transition-colors duration-300">About</Link></li>
+                            </ul>
+                        </nav>
+                        <ThemeToggle />
+                    </div>
                 </div>
             </header>
 
