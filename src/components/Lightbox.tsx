@@ -95,7 +95,7 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
                 className="relative w-full h-full max-w-[95vw] max-h-[95vh] px-4 md:px-12 py-4 md:py-12 flex flex-col items-center justify-center z-[105]"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="relative w-full h-full shadow-2xl flex items-center justify-center">
+                <div className="relative w-full h-full flex items-center justify-center">
                     {/* Loading Spinner */}
                     {isLoading && (
                         <div className="absolute z-20">
