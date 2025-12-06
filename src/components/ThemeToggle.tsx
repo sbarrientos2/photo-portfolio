@@ -4,7 +4,14 @@ import { useTheme } from './ThemeProvider';
 import { Sun, Moon } from 'lucide-react';
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, mounted } = useTheme();
+
+  // Don't render anything until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="w-9 h-9 rounded-full border border-[var(--color-gold)]/30" />
+    );
+  }
 
   return (
     <button
