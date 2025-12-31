@@ -10,6 +10,8 @@ import {
     reorderCategories as dbReorderCategories,
     reorderPhotos as dbReorderPhotos,
     addMultiplePhotos as dbAddMultiplePhotos,
+    renameCategory as dbRenameCategory,
+    deleteMultiplePhotos as dbDeleteMultiplePhotos,
     Photo,
 } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
@@ -79,10 +81,28 @@ export async function reorderPhotos(categoryId: string, photoIds: string[]) {
 export async function addMultiplePhotos(categoryId: string, photos: {src: string, caption: string}[]) {
     const photosWithIds = photos.map(p => ({ ...p, id: uuidv4() }));
     await dbAddMultiplePhotos(categoryId, photosWithIds);
-    
+
     revalidatePath(`/portfolio/${categoryId}`);
     revalidatePath('/admin');
     revalidatePath('/');
 
     return photosWithIds;
+}
+
+export async function renameCategory(categoryId: string, newTitle: string) {
+    if (!newTitle.trim()) {
+        throw new Error("Title is required");
+    }
+    await dbRenameCategory(categoryId, newTitle.trim());
+    revalidatePath('/');
+    revalidatePath('/admin');
+    revalidatePath(`/portfolio/${categoryId}`);
+}
+
+export async function deleteMultiplePhotos(categoryId: string, photoIds: string[]) {
+    if (photoIds.length === 0) return;
+    await dbDeleteMultiplePhotos(categoryId, photoIds);
+    revalidatePath(`/portfolio/${categoryId}`);
+    revalidatePath('/admin');
+    revalidatePath('/');
 }

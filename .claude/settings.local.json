@@ -8,7 +8,10 @@
       "Bash(git push)",
       "Skill(frontend-design)",
       "Bash(npm run build:*)",
-      "Bash(git tag:*)"
+      "Bash(git tag:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(npm run lint:*)"
     ],
     "deny": [],
     "ask": []

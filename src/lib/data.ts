@@ -177,3 +177,16 @@ export async function addMultiplePhotos(categoryId: string, photos: {id: string,
         await sql`INSERT INTO photos (id, category_id, src, caption, sort_order) VALUES (${photo.id}, ${categoryId}, ${photo.src}, ${photo.caption}, ${currentMaxOrder})`;
     }
 }
+
+export async function renameCategory(id: string, newTitle: string): Promise<void> {
+    await initDb();
+    await sql`UPDATE categories SET title = ${newTitle} WHERE id = ${id}`;
+}
+
+export async function deleteMultiplePhotos(categoryId: string, photoIds: string[]): Promise<void> {
+    if (photoIds.length === 0) return;
+    await initDb();
+    for (const photoId of photoIds) {
+        await sql`DELETE FROM photos WHERE id = ${photoId} AND category_id = ${categoryId}`;
+    }
+}
